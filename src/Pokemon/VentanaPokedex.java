@@ -1,10 +1,16 @@
 package Pokemon;
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Image;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.imageio.ImageIO;
+
+
 
 /**
  *
@@ -12,11 +18,52 @@ package Pokemon;
  */
 public class VentanaPokedex extends javax.swing.JFrame {
 
+    private BufferedImage buffer;
+    private Image imagenPokemons;
+    private int contador = 1;
+    private int ancho = 200, alto = 200;
     /**
      * Creates new form VentanaPokedex
      */
+    private void dibujaElPokemonQueEstaEnLaPosicion (int posicion){
+        int fila = posicion / 31;
+        int columna = posicion % 31;
+        Graphics2D g2 = (Graphics2D) buffer.getGraphics();
+        //borro lo que hubiera
+        g2.setColor(Color.black);
+        g2.fillRect(0, 0, alto, ancho);
+        g2.drawImage(imagenPokemons,
+                0,
+                0,
+                ancho,
+                alto,
+                96*columna,
+                96*fila,
+                96*columna + 96,
+                96*fila + 96,
+                null);
+        repaint();
+    }
+    
+    @Override
+    public void paint(Graphics g){
+        super.paintComponents(g);
+        Graphics2D g2 = (Graphics2D) jPanel1.getGraphics();
+        g2.drawImage(buffer, 0, 0,alto,ancho, null);
+    }
+    
     public VentanaPokedex() {
         initComponents();
+        try {
+            imagenPokemons = ImageIO.read(getClass().getResource("black-white.png"));
+        } catch (IOException ex) {
+            Logger.getLogger(VentanaPokedex.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        buffer =(BufferedImage) jPanel1.createImage(ancho,alto);
+        Graphics2D g2 = buffer.createGraphics();
+        
+        dibujaElPokemonQueEstaEnLaPosicion(31);
     }
 
     /**
@@ -28,21 +75,79 @@ public class VentanaPokedex extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jPanel1 = new javax.swing.JPanel();
+        jButton1 = new javax.swing.JButton();
+        jButton2 = new javax.swing.JButton();
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 200, Short.MAX_VALUE)
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 200, Short.MAX_VALUE)
+        );
+
+        jButton1.setText("izquierda");
+        jButton1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                jButton1MousePressed(evt);
+            }
+        });
+
+        jButton2.setText("derecha");
+        jButton2.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                jButton2MousePressed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(43, 43, 43)
+                        .addComponent(jButton1)
+                        .addGap(60, 60, 60)
+                        .addComponent(jButton2)))
+                .addContainerGap(169, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(75, 75, 75)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton1)
+                    .addComponent(jButton2))
+                .addContainerGap(93, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jButton1MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton1MousePressed
+        contador--;
+        if (contador < 0) {contador = 0;}
+        dibujaElPokemonQueEstaEnLaPosicion(contador);
+    }//GEN-LAST:event_jButton1MousePressed
+
+    private void jButton2MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton2MousePressed
+        contador++;
+        if (contador > 507) {contador = 0;}
+        dibujaElPokemonQueEstaEnLaPosicion(contador);
+    }//GEN-LAST:event_jButton2MousePressed
 
     /**
      * @param args the command line arguments
@@ -80,5 +185,8 @@ public class VentanaPokedex extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
+    private javax.swing.JPanel jPanel1;
     // End of variables declaration//GEN-END:variables
 }
