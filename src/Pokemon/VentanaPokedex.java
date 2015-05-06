@@ -6,6 +6,11 @@ import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.Statement;
+import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
@@ -22,6 +27,18 @@ public class VentanaPokedex extends javax.swing.JFrame {
     private Image imagenPokemons;
     private int contador = 1;
     private int ancho = 200, alto = 200;
+    
+    // conectamos a la base de datos
+
+    private Statement estado;
+    private ResultSet resultadoConsulta;
+    private Connection conexion;
+   
+    ////////////////////////////////////////
+    
+    //hashmap para almacenar el resultado de la consulta
+    HashMap <String,Pokemon> listaPokemons = new HashMap();
+    
     /**
      * Creates new form VentanaPokedex
      */
@@ -64,6 +81,30 @@ public class VentanaPokedex extends javax.swing.JFrame {
         Graphics2D g2 = buffer.createGraphics();
         
         dibujaElPokemonQueEstaEnLaPosicion(31);
+        
+        
+        //conexion a la base de datos//////////////////
+        try{
+            Class.forName("com.mysql.jdbc.Driver");
+            conexion = DriverManager.getConnection("jdbc:mysql://127.0.0.1/test","root","");
+            estado = conexion.createStatement();
+            resultadoConsulta = estado.executeQuery("Select * from pokemon");
+            //cargo el resultado de la query en mi hashmap
+            while (resultadoConsulta.next()){
+                Pokemon p = new Pokemon();
+                p.nombre = resultadoConsulta.getString(2);
+                p.generation_id = resultadoConsulta.getInt(5);
+                p.evolution_chain_id = resultadoConsulta.getInt(6);
+                p.species = resultadoConsulta.getString(12);
+                
+                listaPokemons.put(resultadoConsulta.getString(1), p);
+            }
+        }
+        catch (Exception e){
+        }
+        //////////////////////////////////////////////
+        
+        
     }
 
     /**
@@ -78,6 +119,7 @@ public class VentanaPokedex extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -106,6 +148,8 @@ public class VentanaPokedex extends javax.swing.JFrame {
             }
         });
 
+        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -113,13 +157,15 @@ public class VentanaPokedex extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
                         .addGap(43, 43, 43)
                         .addComponent(jButton1)
                         .addGap(60, 60, 60)
-                        .addComponent(jButton2)))
+                        .addComponent(jButton2))
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addContainerGap(169, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -127,7 +173,9 @@ public class VentanaPokedex extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(75, 75, 75)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(28, 28, 28)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton1)
                     .addComponent(jButton2))
@@ -141,12 +189,16 @@ public class VentanaPokedex extends javax.swing.JFrame {
         contador--;
         if (contador < 0) {contador = 0;}
         dibujaElPokemonQueEstaEnLaPosicion(contador);
+        
+        
     }//GEN-LAST:event_jButton1MousePressed
 
     private void jButton2MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton2MousePressed
         contador++;
         if (contador > 507) {contador = 0;}
         dibujaElPokemonQueEstaEnLaPosicion(contador);
+        Pokemon p = listaPokemons.get(String.valueOf(contador));
+        
     }//GEN-LAST:event_jButton2MousePressed
 
     /**
@@ -187,6 +239,7 @@ public class VentanaPokedex extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     // End of variables declaration//GEN-END:variables
 }
