@@ -25,7 +25,7 @@ public class VentanaPokedex extends javax.swing.JFrame {
 
     private BufferedImage buffer;
     private Image imagenPokemons;
-    private int contador = 1;
+    private int contador = 0;
     private int ancho = 200, alto = 200;
     
     // conectamos a la base de datos
@@ -60,8 +60,18 @@ public class VentanaPokedex extends javax.swing.JFrame {
                 96*fila + 96,
                 null);
         repaint();
+        escribeDatos();
     }
     
+    private void escribeDatos(){
+        Pokemon p = listaPokemons.get(String.valueOf(contador+1));
+        if (p != null){
+            jLabel1.setText(p.nombre);
+        }
+        else {
+            jLabel1.setText("NO HAY DATOS");
+        }
+    }
     @Override
     public void paint(Graphics g){
         super.paintComponents(g);
@@ -80,7 +90,7 @@ public class VentanaPokedex extends javax.swing.JFrame {
         buffer =(BufferedImage) jPanel1.createImage(ancho,alto);
         Graphics2D g2 = buffer.createGraphics();
         
-        dibujaElPokemonQueEstaEnLaPosicion(31);
+        
         
         
         //conexion a la base de datos//////////////////
@@ -103,7 +113,7 @@ public class VentanaPokedex extends javax.swing.JFrame {
         catch (Exception e){
         }
         //////////////////////////////////////////////
-        
+        dibujaElPokemonQueEstaEnLaPosicion(0);
         
     }
 
@@ -197,8 +207,7 @@ public class VentanaPokedex extends javax.swing.JFrame {
         contador++;
         if (contador > 507) {contador = 0;}
         dibujaElPokemonQueEstaEnLaPosicion(contador);
-        Pokemon p = listaPokemons.get(String.valueOf(contador));
-        
+
     }//GEN-LAST:event_jButton2MousePressed
 
     /**
