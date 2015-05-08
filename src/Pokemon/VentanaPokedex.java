@@ -179,7 +179,7 @@ public class VentanaPokedex extends javax.swing.JFrame {
             }
         });
         getContentPane().add(jLabel6);
-        jLabel6.setBounds(210, 470, 0, 0);
+        jLabel6.setBounds(220, 470, 30, 20);
 
         jLabel7.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mousePressed(java.awt.event.MouseEvent evt) {
@@ -187,7 +187,7 @@ public class VentanaPokedex extends javax.swing.JFrame {
             }
         });
         getContentPane().add(jLabel7);
-        jLabel7.setBounds(150, 470, 0, 0);
+        jLabel7.setBounds(160, 470, 40, 20);
 
         jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Pokemon/pokedex.png"))); // NOI18N
         jLabel2.setText("jLabel2");
