@@ -68,8 +68,9 @@ public class VentanaPokedex extends javax.swing.JFrame {
         if (p != null){
             jLabel1.setText(p.nombre);
             jLabel3.setText(p.species);
-            jLabel4.setText("altura "+ p.height + "  peso " + p.weight);
+            jLabel4.setText("Height "+ p.height + "  Weight " + p.weight);
             jLabel5.setText(p.habitat);
+            jLabel8.setText(p.color);
         }
         else {
             jLabel1.setText("NO HAY DATOS");
@@ -112,6 +113,7 @@ public class VentanaPokedex extends javax.swing.JFrame {
                 p.height = resultadoConsulta.getString(10);
                 p.weight = resultadoConsulta.getString(11);
                 p.habitat = resultadoConsulta.getString(15);
+                p.color = resultadoConsulta.getString(13);
                 listaPokemons.put(resultadoConsulta.getString(1), p);
             }
         }
@@ -138,6 +140,7 @@ public class VentanaPokedex extends javax.swing.JFrame {
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
+        jLabel8 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -188,6 +191,10 @@ public class VentanaPokedex extends javax.swing.JFrame {
         });
         getContentPane().add(jLabel7);
         jLabel7.setBounds(160, 470, 40, 20);
+
+        jLabel8.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        getContentPane().add(jLabel8);
+        jLabel8.setBounds(300, 540, 290, 40);
 
         jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Pokemon/pokedex.png"))); // NOI18N
         jLabel2.setText("jLabel2");
@@ -262,6 +269,7 @@ contador++;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel1;
     // End of variables declaration//GEN-END:variables
 }
